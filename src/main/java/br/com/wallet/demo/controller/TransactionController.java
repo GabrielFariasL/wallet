@@ -1,15 +1,12 @@
 package br.com.wallet.demo.controller;
 
-import br.com.wallet.demo.DTO.DepositRequestDTO;
-import br.com.wallet.demo.DTO.TransferRequestDTO;
-import br.com.wallet.demo.DTO.WalletResponseDTO;
-import br.com.wallet.demo.DTO.WithdrawaRequestDTO;
+import br.com.wallet.demo.DTO.*;
+import br.com.wallet.demo.model.TransactionModel;
 import br.com.wallet.demo.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -33,6 +30,11 @@ public class TransactionController {
     @PutMapping("/withdraw")
     public WalletResponseDTO withdraw(@RequestBody WithdrawaRequestDTO withdrawaRequestDTO) {
         return transactionService.withdrawal(withdrawaRequestDTO.walletId(), withdrawaRequestDTO.amount());
+    }
+
+    @GetMapping("/statement")
+    public List<TransactionModel> statement(@RequestBody StatamentDTO statamentDTO) {
+        return transactionService.transactionPerWallet(statamentDTO.walletId());
     }
 
 

@@ -1,9 +1,6 @@
 package br.com.wallet.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 
 
@@ -17,11 +14,15 @@ public class TransactionModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @ManyToOne
+    @JoinColumn(name = "wallet_id")
+    private WalletModel wallet;
+
     private LocalDateTime date;
     private int amount;
     private int BalanceAfter;
     private int BalanceBefore;
-    private int walletId;
+
     private Type type;
     public enum Type {
         DEPOSIT, WITHDRAWAL,TRANSFER_SENDER,TRANSFER_RECEIVER
@@ -53,12 +54,12 @@ public class TransactionModel {
         this.amount = amount;
     }
 
-    public int getWalletId() {
-        return walletId;
+    public WalletModel getWallet() {
+        return wallet;
     }
 
-    public void setWalletId(int walletId) {
-        this.walletId = walletId;
+    public void setWallet(WalletModel wallet) {
+        this.wallet = wallet;
     }
 
     public Type getType() {

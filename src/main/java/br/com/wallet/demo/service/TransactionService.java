@@ -46,7 +46,7 @@ public class TransactionService {
 
 
         TransactionModel transaction = new TransactionModel();
-        transaction.setWalletId(walletToId);
+        transaction.setWallet(toWallet);
         transaction.setType(String.valueOf(TransactionModel.Type.TRANSFER_SENDER));
         transaction.setAmount(amount);
         transaction.setDate(LocalDateTime.now());
@@ -55,7 +55,7 @@ public class TransactionService {
         transactionRepository.save(transaction);
 
         TransactionModel transaction1 = new TransactionModel();
-        transaction1.setWalletId(walletFromid);
+        transaction1.setWallet(fromWallet);
         transaction1.setType(String.valueOf(TransactionModel.Type.TRANSFER_RECEIVER));
         transaction1.setAmount(amount);
         transaction1.setDate(LocalDateTime.now());
@@ -72,7 +72,7 @@ public class TransactionService {
 
         WalletModel wallet = walletRepository.findById(walletId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "wallet "+walletId+" not found"));
         TransactionModel transaction = new TransactionModel();
-        transaction.setWalletId(walletId);
+        transaction.setWallet(wallet);
         transaction.setType(String.valueOf(TransactionModel.Type.DEPOSIT));
         transaction.setAmount(amount);
         transaction.setDate(LocalDateTime.now());
@@ -101,7 +101,7 @@ public class TransactionService {
         }
 
         TransactionModel transaction = new TransactionModel();
-        transaction.setWalletId(walletId);
+        transaction.setWallet(wallet);
         transaction.setType(String.valueOf(TransactionModel.Type.WITHDRAWAL));
         transaction.setAmount(amount);
         transaction.setDate(LocalDateTime.now());
@@ -111,4 +111,11 @@ public class TransactionService {
         walletRepository.save(wallet);
         return WalletMappper.toWalletResponse(wallet);
     }
+
+    public List<TransactionModel> transactionPerWallet(int walletId) {
+        return transactionRepository.findByWalletId(walletId);
+
+    }
+
+
 }
