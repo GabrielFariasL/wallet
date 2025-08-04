@@ -11,6 +11,11 @@ public class WalletRequestDTO {
         return id;
     }
 
+    public WalletRequestDTO(String name, int balance) {
+        this.name = name;
+        this.balance = balance;
+    }
+
     public WalletRequestDTO(int id, String name, int balance) {
         this.id = id;
         this.name = name;

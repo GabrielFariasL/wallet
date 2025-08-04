@@ -15,6 +15,20 @@ public class WalletModel {
     private String name;
     private int balance;
 
+    public WalletModel(String name, int balance) {
+        this.name = name;
+        this.balance = balance;
+    }
+
+    public WalletModel() {
+    }
+
+    public WalletModel(int id, String name, int balance) {
+        this.id = id;
+        this.name = name;
+        this.balance = balance;
+    }
+
     public void setId(int id) {
         this.id = id;
     }

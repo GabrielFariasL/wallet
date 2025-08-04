@@ -1,6 +1,8 @@
 package br.com.wallet.demo.DTO;
 
 
+import org.springframework.http.HttpStatus;
+
 public class WalletResponseDTO {
 
     int id;
@@ -40,4 +42,7 @@ public class WalletResponseDTO {
         this.balance = balance;
     }
 
+    public HttpStatus getStatusCode() {
+        return null;
+    }
 }

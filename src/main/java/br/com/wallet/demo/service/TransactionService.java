@@ -1,6 +1,8 @@
 package br.com.wallet.demo.service;
 
-import br.com.wallet.demo.DTO.WalletMappper;
+import br.com.wallet.demo.DTO.TransactionMapper;
+import br.com.wallet.demo.DTO.TransactionResponseDTO;
+import br.com.wallet.demo.DTO.WalletMapper;
 import br.com.wallet.demo.DTO.WalletResponseDTO;
 import br.com.wallet.demo.model.TransactionModel;
 import br.com.wallet.demo.model.WalletModel;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionService {
@@ -65,33 +68,38 @@ public class TransactionService {
 
         walletRepository.saveAll(List.of(fromWallet, toWallet));
 
-        return WalletMappper.toWalletResponse(toWallet);
+        return WalletMapper.toWalletResponse(toWallet);
     }
 
     public WalletResponseDTO deposit(int walletId, int amount) {
 
         WalletModel wallet = walletRepository.findById(walletId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "wallet "+walletId+" not found"));
+
+        int balanceBefore = wallet.getBalance();
+        int balanceAfter = balanceBefore + amount;
+
+        wallet.setBalance(balanceAfter);
+        walletRepository.save(wallet);
+
+        walletRepository.save(wallet);
+
         TransactionModel transaction = new TransactionModel();
         transaction.setWallet(wallet);
         transaction.setType(String.valueOf(TransactionModel.Type.DEPOSIT));
         transaction.setAmount(amount);
         transaction.setDate(LocalDateTime.now());
-        transaction.setBalanceBefore(wallet.getBalance());
-        transaction.setBalanceAfter(wallet.getBalance()+amount);
+        transaction.setBalanceBefore(balanceBefore);
+        transaction.setBalanceAfter(balanceAfter);
         transactionRepository.save(transaction);
 
-        wallet.setBalance(wallet.getBalance()+amount);
-
-        walletRepository.save(wallet);
-
-        return WalletMappper.toWalletResponse(wallet);
+        return WalletMapper.toWalletResponse(wallet);
 
     }
 
     public WalletResponseDTO withdrawal(int walletId, int amount) {
         WalletModel wallet = walletRepository.findById(walletId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "wallet "+walletId+" not found"));
 
-        if (wallet.getBalance() > amount){
+        if (wallet.getBalance() >= amount){
 
             wallet.setBalance(wallet.getBalance() - amount);
 
@@ -109,12 +117,11 @@ public class TransactionService {
         transaction.setBalanceAfter(wallet.getBalance()+amount);
         transactionRepository.save(transaction);
         walletRepository.save(wallet);
-        return WalletMappper.toWalletResponse(wallet);
+        return WalletMapper.toWalletResponse(wallet);
     }
 
-    public List<TransactionModel> transactionPerWallet(int walletId) {
-        return transactionRepository.findByWalletId(walletId);
-
+    public List<TransactionResponseDTO> transactionPerWallet(int walletId) {
+        return transactionRepository.findByWalletId(walletId).stream().map(transaction -> TransactionMapper.toTransactionResponseDTO(transaction)).collect(Collectors.toList());
     }
 
 

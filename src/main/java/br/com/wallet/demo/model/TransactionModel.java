@@ -20,8 +20,8 @@ public class TransactionModel {
 
     private LocalDateTime date;
     private int amount;
-    private int BalanceAfter;
-    private int BalanceBefore;
+    private int balanceAfter;
+    private int balanceBefore;
 
     private Type type;
     public enum Type {
@@ -71,19 +71,19 @@ public class TransactionModel {
     }
 
     public int getBalanceAfter() {
-        return BalanceAfter;
+        return balanceAfter;
     }
 
     public void setBalanceAfter(int balanceAfter) {
-        BalanceAfter = balanceAfter;
+        this.balanceAfter = balanceAfter;
     }
 
     public int getBalanceBefore() {
-        return BalanceBefore;
+        return balanceBefore;
     }
 
     public void setBalanceBefore(int balanceBefore) {
-        BalanceBefore = balanceBefore;
+        this.balanceBefore = balanceBefore;
     }
 
 

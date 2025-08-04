@@ -2,7 +2,7 @@ package br.com.wallet.demo.DTO;
 
 import br.com.wallet.demo.model.WalletModel;
 
-public class WalletMappper {
+public class WalletMapper {
 
     public static WalletModel toWalletModel(WalletRequestDTO requestDTO) {
         WalletModel wallet = new WalletModel();

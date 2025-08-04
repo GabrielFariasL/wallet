@@ -4,6 +4,7 @@ import br.com.wallet.demo.DTO.*;
 import br.com.wallet.demo.model.TransactionModel;
 import br.com.wallet.demo.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,24 +18,24 @@ public class TransactionController {
     private TransactionService transactionService;
 
 
-    @PutMapping("/transfer")
-    public WalletResponseDTO transfer(@RequestBody TransferRequestDTO transferRequestDTO) {
-        return transactionService.transfer(transferRequestDTO.fromWalletId(), transferRequestDTO.toWalletId(), transferRequestDTO.amount());
+    @PatchMapping("/{id}/transfer")
+    public ResponseEntity<WalletResponseDTO> transfer(@RequestBody TransferRequestDTO transferRequestDTO) {
+        return ResponseEntity.ok().body(transactionService.transfer(transferRequestDTO.fromWalletId(), transferRequestDTO.toWalletId(), transferRequestDTO.amount()));
     }
 
-    @PutMapping("/deposit")
-    public WalletResponseDTO deposit(@RequestBody DepositRequestDTO depositRequestDTO) {
-        return transactionService.deposit(depositRequestDTO.walletId(),depositRequestDTO.amount());
+    @PatchMapping("/{id}/deposit")
+    public ResponseEntity<WalletResponseDTO> deposit(@RequestBody DepositRequestDTO depositRequestDTO) {
+        return ResponseEntity.ok().body(transactionService.deposit(depositRequestDTO.walletId(),depositRequestDTO.amount()));
     }
 
-    @PutMapping("/withdraw")
-    public WalletResponseDTO withdraw(@RequestBody WithdrawaRequestDTO withdrawaRequestDTO) {
-        return transactionService.withdrawal(withdrawaRequestDTO.walletId(), withdrawaRequestDTO.amount());
+    @PatchMapping("/{id}/withdraw")
+    public ResponseEntity<WalletResponseDTO> withdraw(@RequestBody WithdrawaRequestDTO withdrawaRequestDTO) {
+        return ResponseEntity.ok().body(transactionService.withdrawal(withdrawaRequestDTO.walletId(), withdrawaRequestDTO.amount()));
     }
 
-    @GetMapping("/statement")
-    public List<TransactionModel> statement(@RequestBody StatamentDTO statamentDTO) {
-        return transactionService.transactionPerWallet(statamentDTO.walletId());
+    @GetMapping("/{id}/statement")
+    public List<TransactionResponseDTO> statement(@PathVariable Integer id) {
+        return transactionService.transactionPerWallet(id);
     }
 
 
